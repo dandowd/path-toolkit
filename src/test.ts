@@ -1,4 +1,4 @@
-import { path, Node } from './path';
+import { changePath, Node, getPath } from './path';
 
 interface Line {
   lineId: number;
@@ -36,6 +36,10 @@ let orders: Order[] = [
         item: 'order 2, item 2'
       }
     ]
+  },
+  {
+    orderId: 3,
+    lines: []
   }
 ];
 
@@ -48,10 +52,12 @@ let nodes: Node[] = [
     name: 'lines',
     idProp: 'lineId',
     id: 2
-  },
-  {
-    name: 'item'
   }
 ];
 
-console.log(path(orders, nodes, 0));
+function change(current) {
+  return { ...current, lineId: '3' };
+}
+
+console.log(changePath(orders, nodes, change));
+console.log(orders[1].lines[1]);
