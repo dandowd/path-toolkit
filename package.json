@@ -1,0 +1,13 @@
+{
+  "name": "path-toolkit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "types": "index.d.js",
+  "scripts": {
+    "build": "cd ./src && tsc",
+    "test": "node test.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
