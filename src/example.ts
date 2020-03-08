@@ -3,6 +3,7 @@ import { changePath, Node } from './path';
 interface Line {
   lineId: number;
   item: string;
+  discounts?: [];
 }
 
 interface Order {
@@ -16,11 +17,13 @@ let orders: Order[] = [
     lines: [
       {
         lineId: 1,
-        item: 'order 1, item 1'
+        item: 'order 1, item 1',
+        discounts: []
       },
       {
         lineId: 2,
-        item: 'order 1, item 2'
+        item: 'order 1, item 2',
+        discounts: []
       }
     ]
   },
@@ -29,11 +32,13 @@ let orders: Order[] = [
     lines: [
       {
         lineId: 1,
-        item: 'order 2, item 1'
+        item: 'order 2, item 1',
+        discounts: []
       },
       {
         lineId: 2,
-        item: 'order 2, item 2'
+        item: 'order 2, item 2',
+        discounts: []
       }
     ]
   },
@@ -56,12 +61,15 @@ let nodes: Node[] = [
       prop: 'lineId',
       id: 2
     }
+  },
+  {
+    name: 'discounts'
   }
 ];
 
 function change(current) {
-  return { ...current, lineId: 3 };
+  return [...current];
 }
 
 let newTest = changePath(orders, nodes, change);
-console.log(newTest[1].lines);
+console.log(newTest[1].lines[1]);

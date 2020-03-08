@@ -30,7 +30,7 @@ export function path(
         nextPath,
         ...current.slice(nextIndex + 1)
       ];
-    } else if (nodes[nodeIndex].name && !nodes[nodeIndex].searchFor.prop) {
+    } else if (nodes[nodeIndex].name && !nodes[nodeIndex].searchFor) {
       //current is an object
       let nextPath = path(
         current[nodes[nodeIndex].name],

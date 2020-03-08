@@ -18,11 +18,13 @@ var orders = [
         lines: [
             {
                 lineId: 1,
-                item: 'order 1, item 1'
+                item: 'order 1, item 1',
+                discounts: []
             },
             {
                 lineId: 2,
-                item: 'order 1, item 2'
+                item: 'order 1, item 2',
+                discounts: []
             }
         ]
     },
@@ -31,11 +33,13 @@ var orders = [
         lines: [
             {
                 lineId: 1,
-                item: 'order 2, item 1'
+                item: 'order 2, item 1',
+                discounts: []
             },
             {
                 lineId: 2,
-                item: 'order 2, item 2'
+                item: 'order 2, item 2',
+                discounts: []
             }
         ]
     },
@@ -57,10 +61,13 @@ var nodes = [
             prop: 'lineId',
             id: 2
         }
+    },
+    {
+        name: 'discounts'
     }
 ];
 function change(current) {
     return __assign(__assign({}, current), { lineId: 3 });
 }
 var newTest = path_1.changePath(orders, nodes, change);
-console.log(newTest[1].lines);
+console.log(newTest[1].lines[1]);
