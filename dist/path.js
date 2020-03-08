@@ -35,9 +35,8 @@ function path(current, nodes, action) {
             ], current.slice(nextIndex + 1));
         }
         else if (nodes[nodeIndex].name && !nodes[nodeIndex].searchFor) {
-            //current is an object
             var nextPath = path(current[nodes[nodeIndex].name], nodes, action)(nodeIndex + 1);
-            return __assign(__assign({}, current), (_a = {}, _a[current[nodes[nodeIndex].name]] = nextPath, _a));
+            return __assign(__assign({}, current), (_a = {}, _a[nodes[nodeIndex].name] = nextPath, _a));
         }
         else {
             //Current is an object with an array

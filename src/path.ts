@@ -31,13 +31,13 @@ export function path(
         ...current.slice(nextIndex + 1)
       ];
     } else if (nodes[nodeIndex].name && !nodes[nodeIndex].searchFor) {
-      //current is an object
       let nextPath = path(
         current[nodes[nodeIndex].name],
         nodes,
         action
       )(nodeIndex + 1);
-      return { ...current, [current[nodes[nodeIndex].name]]: nextPath };
+
+      return { ...current, [nodes[nodeIndex].name]: nextPath };
     } else {
       //Current is an object with an array
       let nextIndex = current[nodes[nodeIndex].name].findIndex(

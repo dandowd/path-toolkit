@@ -6,7 +6,7 @@
   "types": "index.d.js",
   "scripts": {
     "build": "cd ./src && tsc",
-    "test": "node example.js"
+    "test": "cd dist && node example.js"
   },
   "author": "",
   "license": "ISC"

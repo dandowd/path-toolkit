@@ -3,12 +3,16 @@ import { changePath, Node } from './path';
 interface Line {
   lineId: number;
   item: string;
-  discounts?: [];
+  discounts?: Discount[];
 }
 
 interface Order {
   orderId: number;
   lines: Line[];
+}
+
+interface Discount {
+  amount: number;
 }
 
 let orders: Order[] = [
@@ -33,7 +37,7 @@ let orders: Order[] = [
       {
         lineId: 1,
         item: 'order 2, item 1',
-        discounts: []
+        discounts: [{ amount: 30 }]
       },
       {
         lineId: 2,
@@ -68,7 +72,7 @@ let nodes: Node[] = [
 ];
 
 function change(current) {
-  return [...current];
+  return [{ amount: 10 }];
 }
 
 let newTest = changePath(orders, nodes, change);
