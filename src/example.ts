@@ -1,4 +1,4 @@
-import { changePath, Node, getPath } from './path';
+import { changePath, Node } from './path';
 
 interface Line {
   lineId: number;
@@ -64,3 +64,4 @@ function change(current) {
 }
 
 let newTest = changePath(orders, nodes, change);
+console.log(newTest[1].lines);

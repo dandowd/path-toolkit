@@ -22,8 +22,7 @@ function path(current, nodes, action) {
     return function (nodeIndex) {
         var _a, _b;
         if (!nodes[nodeIndex]) {
-            console.log(current);
-            return __assign({}, action(current));
+            return action(current);
         }
         if (!nodes[nodeIndex].name) {
             //Current is an array
@@ -53,10 +52,6 @@ function path(current, nodes, action) {
     };
 }
 exports.path = path;
-function getPath(current, nodes) {
-    return path(current, nodes)(0);
-}
-exports.getPath = getPath;
 function changePath(current, nodes, action) {
     return path(current, nodes, action)(0);
 }

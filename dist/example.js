@@ -63,6 +63,4 @@ function change(current) {
     return __assign(__assign({}, current), { lineId: 3 });
 }
 var newTest = path_1.changePath(orders, nodes, change);
-console.log(orders);
-console.log('new graph');
 console.log(newTest[1].lines);

@@ -9,11 +9,11 @@ export interface Node {
 export function path(
   current: any,
   nodes: Node[],
-  action?: (current: any) => any
+  action: (current: any) => any
 ) {
   return (nodeIndex: number) => {
     if (!nodes[nodeIndex]) {
-      return { ...action(current) };
+      return action(current);
     }
 
     if (!nodes[nodeIndex].name) {
@@ -61,10 +61,6 @@ export function path(
       };
     }
   };
-}
-
-export function getPath(current: any, nodes: Node[]) {
-  return path(current, nodes)(0);
 }
 
 export function changePath(
