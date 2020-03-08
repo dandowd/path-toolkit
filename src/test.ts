@@ -45,19 +45,22 @@ let orders: Order[] = [
 
 let nodes: Node[] = [
   {
-    idProp: 'orderId',
-    id: 2
+    searchFor: {
+      prop: 'orderId',
+      id: 2
+    }
   },
   {
     name: 'lines',
-    idProp: 'lineId',
-    id: 2
+    searchFor: {
+      prop: 'lineId',
+      id: 2
+    }
   }
 ];
 
 function change(current) {
-  return { ...current, lineId: '3' };
+  return { ...current, lineId: 3 };
 }
 
-console.log(changePath(orders, nodes, change));
-console.log(orders[1].lines[1]);
+let newTest = changePath(orders, nodes, change);

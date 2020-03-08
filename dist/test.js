@@ -46,17 +46,23 @@ var orders = [
 ];
 var nodes = [
     {
-        idProp: 'orderId',
-        id: 2
+        searchFor: {
+            prop: 'orderId',
+            id: 2
+        }
     },
     {
         name: 'lines',
-        idProp: 'lineId',
-        id: 2
+        searchFor: {
+            prop: 'lineId',
+            id: 2
+        }
     }
 ];
 function change(current) {
-    return __assign(__assign({}, current), { lineId: '3' });
+    return __assign(__assign({}, current), { lineId: 3 });
 }
-console.log(path_1.changePath(orders, nodes, change));
-console.log(orders[1].lines[1]);
+var newTest = path_1.changePath(orders, nodes, change);
+console.log(orders);
+console.log('new graph');
+console.log(newTest[1].lines);

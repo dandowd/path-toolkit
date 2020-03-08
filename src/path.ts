@@ -1,7 +1,9 @@
 export interface Node {
   name?: string;
-  idProp?: string;
-  id?: string | number;
+  searchFor?: {
+    prop: string;
+    id: string | number;
+  };
 }
 
 export function path(
@@ -9,28 +11,54 @@ export function path(
   nodes: Node[],
   action?: (current: any) => any
 ) {
-  return nodeIndex => {
+  return (nodeIndex: number) => {
     if (!nodes[nodeIndex]) {
-      if (!nodes[nodeIndex + 1] && action) {
-        console.log(current);
-        current = action(current);
-        console.log(current);
-      }
-      return current;
+      return { ...action(current) };
     }
 
     if (!nodes[nodeIndex].name) {
-      let next = current.find(
-        n => n[nodes[nodeIndex].idProp] === nodes[nodeIndex].id
+      //Current is an array
+      let nextIndex = current.findIndex(
+        n =>
+          n[nodes[nodeIndex].searchFor.prop] === nodes[nodeIndex].searchFor.id
       );
-      return path(next, nodes, action)(nodeIndex + 1);
-    } else if (nodes[nodeIndex].name && !nodes[nodeIndex].idProp) {
-      return path(current[nodes[nodeIndex].name], nodes, action)(nodeIndex + 1);
+
+      let nextPath = path(current[nextIndex], nodes, action)(nodeIndex + 1);
+
+      return [
+        ...current.slice(0, nextIndex),
+        nextPath,
+        ...current.slice(nextIndex + 1)
+      ];
+    } else if (nodes[nodeIndex].name && !nodes[nodeIndex].searchFor.prop) {
+      //current is an object
+      let nextPath = path(
+        current[nodes[nodeIndex].name],
+        nodes,
+        action
+      )(nodeIndex + 1);
+      return { ...current, [current[nodes[nodeIndex].name]]: nextPath };
     } else {
-      let next = current[nodes[nodeIndex].name].find(
-        n => n[nodes[nodeIndex].idProp] === nodes[nodeIndex].id
+      //Current is an object with an array
+      let nextIndex = current[nodes[nodeIndex].name].findIndex(
+        n =>
+          n[nodes[nodeIndex].searchFor.prop] === nodes[nodeIndex].searchFor.id
       );
-      return path(next, nodes, action)(nodeIndex + 1);
+
+      let nextPath = path(
+        current[nodes[nodeIndex].name][nodeIndex],
+        nodes,
+        action
+      )(nodeIndex + 1);
+
+      return {
+        ...current,
+        [nodes[nodeIndex].name]: [
+          ...current[nodes[nodeIndex].name].slice(0, nextIndex),
+          nextPath,
+          ...current[nodes[nodeIndex].name].slice(nextIndex + 1)
+        ]
+      };
     }
   };
 }
