@@ -1,4 +1,4 @@
-import { changePath, Node, removeFromArray } from './path';
+import { changePath, Node, removeFromArray } from './index';
 
 interface Line {
   lineId: number;
