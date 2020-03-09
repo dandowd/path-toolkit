@@ -39,11 +39,17 @@ function path(current, nodes, action) {
             return __assign(__assign({}, current), (_a = {}, _a[nodes[nodeIndex].name] = nextPath, _a));
         }
         else {
+            var nextIndex = void 0;
             //Current is an object with an array
-            var nextIndex = current[nodes[nodeIndex].name].findIndex(function (n) {
-                return n[nodes[nodeIndex].searchFor.prop] === nodes[nodeIndex].searchFor.id;
-            });
-            var nextPath = path(current[nodes[nodeIndex].name][nodeIndex], nodes, action)(nodeIndex + 1);
+            if (nodes[nodeIndex].searchFor) {
+                nextIndex = current[nodes[nodeIndex].name].findIndex(function (n) {
+                    return n[nodes[nodeIndex].searchFor.prop] === nodes[nodeIndex].searchFor.id;
+                });
+            }
+            else {
+                nextIndex = nodes[nodeIndex].index;
+            }
+            var nextPath = path(current[nodes[nodeIndex].name][nextIndex], nodes, action)(nodeIndex + 1);
             return __assign(__assign({}, current), (_b = {}, _b[nodes[nodeIndex].name] = __spreadArrays(current[nodes[nodeIndex].name].slice(0, nextIndex), [
                 nextPath
             ], current[nodes[nodeIndex].name].slice(nextIndex + 1)), _b));

@@ -1,5 +1,6 @@
 export interface Node {
     name?: string;
+    index?: number;
     searchFor?: {
         prop: string;
         id: string | number;

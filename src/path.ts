@@ -1,5 +1,6 @@
 export interface Node {
   name?: string;
+  index?: number;
   searchFor?: {
     prop: string;
     id: string | number;
@@ -18,10 +19,15 @@ export function path(
 
     if (!nodes[nodeIndex].name) {
       //Current is an array
-      let nextIndex = current.findIndex(
-        n =>
-          n[nodes[nodeIndex].searchFor.prop] === nodes[nodeIndex].searchFor.id
-      );
+      let nextIndex;
+      if (nodes[nodeIndex].index) {
+        nextIndex = current.findIndex(
+          n =>
+            n[nodes[nodeIndex].searchFor.prop] === nodes[nodeIndex].searchFor.id
+        );
+      } else {
+        nextIndex = nodes[nodeIndex].index;
+      }
 
       let nextPath = path(current[nextIndex], nodes, action)(nodeIndex + 1);
 
@@ -39,14 +45,19 @@ export function path(
 
       return { ...current, [nodes[nodeIndex].name]: nextPath };
     } else {
+      let nextIndex;
       //Current is an object with an array
-      let nextIndex = current[nodes[nodeIndex].name].findIndex(
-        n =>
-          n[nodes[nodeIndex].searchFor.prop] === nodes[nodeIndex].searchFor.id
-      );
+      if (nodes[nodeIndex].searchFor) {
+        nextIndex = current[nodes[nodeIndex].name].findIndex(
+          n =>
+            n[nodes[nodeIndex].searchFor.prop] === nodes[nodeIndex].searchFor.id
+        );
+      } else {
+        nextIndex = nodes[nodeIndex].index;
+      }
 
       let nextPath = path(
-        current[nodes[nodeIndex].name][nodeIndex],
+        current[nodes[nodeIndex].name][nextIndex],
         nodes,
         action
       )(nodeIndex + 1);
@@ -59,6 +70,34 @@ export function path(
           ...current[nodes[nodeIndex].name].slice(nextIndex + 1)
         ]
       };
+    }
+  };
+}
+
+export function removeFromArray(node: Node) {
+  return current => {
+    if (node.index) {
+      return [
+        ...current.slice(0, node.index),
+        ...current.slice(node.index + 1)
+      ];
+    }
+
+    if (node.searchFor) {
+      let index = current.findIndex(
+        n => n[node.searchFor.prop] === node.searchFor.id
+      );
+      return [...current.slice(0, index), ...current.slice(index + 1)];
+    }
+  };
+}
+
+export function insertIntoArray(newItem, index?) {
+  return current => {
+    if (index) {
+      return [...current.slice(0, index), newItem, ...current.slice(index + 1)];
+    } else {
+      return [...current, newItem];
     }
   };
 }

@@ -1,4 +1,4 @@
-import { changePath, Node } from './path';
+import { changePath, Node, removeFromArray } from './path';
 
 interface Line {
   lineId: number;
@@ -60,20 +60,16 @@ let nodes: Node[] = [
     }
   },
   {
-    name: 'lines',
-    searchFor: {
-      prop: 'lineId',
-      id: 2
-    }
-  },
-  {
-    name: 'discounts'
+    name: 'lines'
   }
 ];
 
-function change(current) {
-  return [{ amount: 10 }];
-}
+let removalNode = {
+  searchFor: {
+    prop: 'lineId',
+    id: 2
+  }
+};
 
-let newTest = changePath(orders, nodes, change);
-console.log(newTest[1].lines[1]);
+let newTest = changePath(orders, nodes, removeFromArray(removalNode));
+console.log(newTest[1].lines);
