@@ -20,11 +20,23 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 function path(current, nodes, action) {
     return function (nodeIndex) {
-        var _a, _b;
+        var _a;
         if (!nodes[nodeIndex]) {
             return action(current);
         }
-        if (!nodes[nodeIndex].name) {
+        if (nodes[nodeIndex].index) {
+            //Current is an array
+            var nextIndex = nodes[nodeIndex].index;
+            var nextPath = path(current[nextIndex], nodes, action)(nodeIndex + 1);
+            return __spreadArrays(current.slice(0, nextIndex), [
+                nextPath
+            ], current.slice(nextIndex + 1));
+        }
+        else if (nodes[nodeIndex].select) {
+            var nextPath = path(current[nodes[nodeIndex].select], nodes, action)(nodeIndex + 1);
+            return __assign(__assign({}, current), (_a = {}, _a[nodes[nodeIndex].select] = nextPath, _a));
+        }
+        else {
             //Current is an array
             var nextIndex = current.findIndex(function (n) {
                 return n[nodes[nodeIndex].searchFor.prop] === nodes[nodeIndex].searchFor.id;
@@ -33,26 +45,6 @@ function path(current, nodes, action) {
             return __spreadArrays(current.slice(0, nextIndex), [
                 nextPath
             ], current.slice(nextIndex + 1));
-        }
-        else if (nodes[nodeIndex].name && !nodes[nodeIndex].searchFor) {
-            var nextPath = path(current[nodes[nodeIndex].name], nodes, action)(nodeIndex + 1);
-            return __assign(__assign({}, current), (_a = {}, _a[nodes[nodeIndex].name] = nextPath, _a));
-        }
-        else {
-            var nextIndex = void 0;
-            //Current is an object with an array
-            if (nodes[nodeIndex].searchFor) {
-                nextIndex = current[nodes[nodeIndex].name].findIndex(function (n) {
-                    return n[nodes[nodeIndex].searchFor.prop] === nodes[nodeIndex].searchFor.id;
-                });
-            }
-            else {
-                nextIndex = nodes[nodeIndex].index;
-            }
-            var nextPath = path(current[nodes[nodeIndex].name][nextIndex], nodes, action)(nodeIndex + 1);
-            return __assign(__assign({}, current), (_b = {}, _b[nodes[nodeIndex].name] = __spreadArrays(current[nodes[nodeIndex].name].slice(0, nextIndex), [
-                nextPath
-            ], current[nodes[nodeIndex].name].slice(nextIndex + 1)), _b));
         }
     };
 }

@@ -1,5 +1,5 @@
-export interface Node {
-  name?: string;
+export interface INode {
+  select?: string;
   index?: number;
   searchFor?: {
     prop: string;
@@ -9,7 +9,7 @@ export interface Node {
 
 export function path(
   current: any,
-  nodes: Node[],
+  nodes: INode[],
   action: (current: any) => any
 ) {
   return (nodeIndex: number) => {
@@ -17,66 +17,46 @@ export function path(
       return action(current);
     }
 
-    if (!nodes[nodeIndex].name) {
+    if (nodes[nodeIndex].index) {
       //Current is an array
-      let nextIndex;
-      if (nodes[nodeIndex].index) {
-        nextIndex = current.findIndex(
-          n =>
-            n[nodes[nodeIndex].searchFor.prop] === nodes[nodeIndex].searchFor.id
-        );
-      } else {
-        nextIndex = nodes[nodeIndex].index;
-      }
+      let nextIndex = nodes[nodeIndex].index;
 
       let nextPath = path(current[nextIndex], nodes, action)(nodeIndex + 1);
 
       return [
         ...current.slice(0, nextIndex),
         nextPath,
-        ...current.slice(nextIndex + 1)
+        ...current.slice(nextIndex + 1),
       ];
-    } else if (nodes[nodeIndex].name && !nodes[nodeIndex].searchFor) {
+    } else if (nodes[nodeIndex].select) {
       let nextPath = path(
-        current[nodes[nodeIndex].name],
+        current[nodes[nodeIndex].select],
         nodes,
         action
       )(nodeIndex + 1);
 
-      return { ...current, [nodes[nodeIndex].name]: nextPath };
+      return { ...current, [nodes[nodeIndex].select]: nextPath };
     } else {
-      let nextIndex;
-      //Current is an object with an array
-      if (nodes[nodeIndex].searchFor) {
-        nextIndex = current[nodes[nodeIndex].name].findIndex(
-          n =>
-            n[nodes[nodeIndex].searchFor.prop] === nodes[nodeIndex].searchFor.id
-        );
-      } else {
-        nextIndex = nodes[nodeIndex].index;
-      }
+      //Current is an array
+      let nextIndex = current.findIndex(
+        (n) =>
+          n[nodes[nodeIndex].searchFor.prop] === nodes[nodeIndex].searchFor.id
+      );
 
-      let nextPath = path(
-        current[nodes[nodeIndex].name][nextIndex],
-        nodes,
-        action
-      )(nodeIndex + 1);
+      let nextPath = path(current[nextIndex], nodes, action)(nodeIndex + 1);
 
-      return {
-        ...current,
-        [nodes[nodeIndex].name]: [
-          ...current[nodes[nodeIndex].name].slice(0, nextIndex),
-          nextPath,
-          ...current[nodes[nodeIndex].name].slice(nextIndex + 1)
-        ]
-      };
+      return [
+        ...current.slice(0, nextIndex),
+        nextPath,
+        ...current.slice(nextIndex + 1),
+      ];
     }
   };
 }
 
 export function changePath(
   current: any,
-  nodes: Node[],
+  nodes: INode[],
   action: (current: any) => any
 ) {
   return path(current, nodes, action)(0);

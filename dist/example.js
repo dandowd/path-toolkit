@@ -1,13 +1,17 @@
 "use strict";
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var path_1 = require("./path");
+var pathBuilder_1 = require("./pathBuilder");
 var orders = [
     {
         orderId: 1,
@@ -15,59 +19,38 @@ var orders = [
             {
                 lineId: 1,
                 item: 'order 1, item 1',
-                discounts: []
+                discounts: [],
             },
             {
                 lineId: 2,
                 item: 'order 1, item 2',
-                discounts: []
-            }
-        ]
+                discounts: [],
+            },
+        ],
     },
     {
         orderId: 2,
         lines: [
             {
-                lineId: 1,
+                lineId: 3,
                 item: 'order 2, item 1',
-                discounts: [{ amount: 30 }]
+                discounts: [{ amount: 30 }],
             },
             {
-                lineId: 2,
+                lineId: 4,
                 item: 'order 2, item 2',
-                discounts: []
-            }
-        ]
+                discounts: [],
+            },
+        ],
     },
     {
         orderId: 3,
-        lines: []
-    }
-];
-var nodes = [
-    {
-        searchFor: {
-            prop: 'orderId',
-            id: 2
-        }
+        lines: [],
     },
-    {
-        name: 'lines'
-    }
 ];
-var removalNode = {
-    searchFor: {
-        prop: 'lineId',
-        id: 2
-    }
-};
-function removeFromArray(node) {
-    return function (current) {
-        if (node.searchFor) {
-            var index = current.findIndex(function (n) { return n[node.searchFor.prop] === node.searchFor.id; });
-            return __spreadArrays(current.slice(0, index), current.slice(index + 1));
-        }
-    };
-}
-var newTest = path_1.changePath(orders, nodes, removeFromArray(removalNode));
-console.log(newTest[1].lines);
+var alteredPath = pathBuilder_1.NodeBuilder.create()
+    .index(1)
+    .select('lines')
+    .searchFor('lineId', 3)
+    .apply(orders)(function (current) { return (__assign(__assign({}, current), { lineId: 8 })); });
+console.log(alteredPath[1].lines);
